@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class HashMapOpenAddressing {
     private static final double LOAD_FACTOR = 0.75;
-    int size = 1;
-    Element[] innerArray;
+    private int size = 1;
+    private Element[] innerArray;
     private int internalCapacity = 4;
 
     public HashMapOpenAddressing() {
@@ -40,7 +40,7 @@ public class HashMapOpenAddressing {
     }
 
     public int size() {
-        return size;
+        return size - 1;
     }
 
     private boolean checkCapacity() {
