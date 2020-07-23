@@ -27,6 +27,13 @@ public class HashMapOpenAddressingTest {
     }
 
     @Test
+    public void shouldReturnValidSizeWhenMapIsEmpty() {
+        int size = intToLongMap.size();
+
+        Assert.assertEquals(0, size);
+    }
+
+    @Test
     public void shouldGetElementFromMap() {
         intToLongMap.put(5, 100);
         long element = intToLongMap.get(5);
@@ -62,6 +69,15 @@ public class HashMapOpenAddressingTest {
     }
 
     @Test
+    public void shouldGetElementFromNegativeKeyWithCollision() {
+        intToLongMap.put(5, 100);
+        intToLongMap.put(-5, 101);
+        long element = intToLongMap.get(-5);
+
+        Assert.assertEquals(101, element);
+    }
+
+    @Test
     public void shouldAddAndGetByIntegerMaxKey() {
         intToLongMap.put(Integer.MAX_VALUE, 100);
         long element = intToLongMap.get(Integer.MAX_VALUE);
@@ -85,5 +101,4 @@ public class HashMapOpenAddressingTest {
 
         intToLongMap.get(6);
     }
-
 }

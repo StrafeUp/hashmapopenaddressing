@@ -78,7 +78,7 @@ public class HashMapOpenAddressing {
     } // Trick with getting remainder of division by power of 2
 
     private int hash(int k) {
-        return k; // We can use plain key as result of hash function, because collision will happen only on same keys
+        return k;
     }
 
     private static class Element {
