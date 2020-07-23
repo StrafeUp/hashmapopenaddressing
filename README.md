@@ -1,4 +1,4 @@
-# hashmapopenaddressing
+# HashMap Open addressing
 
 HashMap implementation based on open addressing collision resolution mechanism
 which is based on probing, or searching through alternate locations in the array
