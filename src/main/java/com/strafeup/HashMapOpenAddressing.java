@@ -13,7 +13,9 @@ public class HashMapOpenAddressing {
     }
 
     public void put(int key, long value) {
-        resize();
+        if (checkCapacity()) {
+            resize();
+        }
         size++;
         int pos = getOffset(key);
         if (innerArray[pos] == null) {
@@ -21,6 +23,28 @@ public class HashMapOpenAddressing {
         } else {
             linearProbe(pos, key, value);
         }
+    }
+
+    public long get(int key) {
+        int pos = getOffset(key);
+
+        if (innerArray[pos] == null) {
+            throw new ElementIsNotPresentException(String.format("Element with key %d is not present in the map", key));
+        }
+
+        while (innerArray[pos] != null && innerArray[pos].key != key) {
+            pos = (pos + 1) & (internalCapacity - 1);
+        }
+
+        return innerArray[pos].value;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    private boolean checkCapacity() {
+        return (double) size / innerArray.length >= LOAD_FACTOR;
     }
 
     private void linearProbe(int pos, int key, long value) {
@@ -31,35 +55,22 @@ public class HashMapOpenAddressing {
         }
     }
 
-    public long get(int key) {
-        int pos = getOffset(key);
-        if (innerArray[pos] == null) {
-            throw new ElementIsNotPresentException(String.format("Element with key %d is not present in the map", key));
-        }
-        return innerArray[pos].value;
-    }
-
-    public int size() {
-        return size;
-    }
-
     private void resize() {
-        if ((double) size / innerArray.length >= LOAD_FACTOR) {
-            int elemCount = 0;
-            int newCapacity = innerArray.length << 1; // Incrementing capacity by power of 2
-            internalCapacity = newCapacity;
+        int elemCount = 0;
+        int newCapacity = innerArray.length << 1; // Incrementing capacity by power of 2
+        internalCapacity = newCapacity;
 
-            Element[] tempArr = innerArray;
-            innerArray = new Element[newCapacity];
+        Element[] tempArr = innerArray;
+        innerArray = new Element[newCapacity];
 
-            for (Element elem : tempArr) {
-                if (elem != null) {
-                    put(elem.key, elem.value);
-                    elemCount++;
-                }
+        for (Element elem : tempArr) {
+            if (elem != null) {
+                put(elem.key, elem.value);
+                elemCount++;
             }
-            this.size = elemCount;
         }
+        this.size = elemCount;
+
     }
 
     private int getOffset(int k) {
